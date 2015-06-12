@@ -8,7 +8,7 @@ fn main() {
 
     fq.setf(2.5);
 
-    let mut fr = fq << 2;
+    let fr = fq << 2;
     
 
     println!("{}", fr.geti());

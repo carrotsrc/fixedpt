@@ -4,8 +4,7 @@ use std::ops::{Add,Sub, Mul, Div, Shl, Shr};
 pub struct Fixed32 {
     val: i32,
     f: u8,
-    m: u8,
-    msig: i32
+    i: u8,
 }
 
 impl Fixed32 {
@@ -13,8 +12,7 @@ impl Fixed32 {
         Fixed32 {
             val: 0,
             f: qf,
-            m: 32-qf,
-            msig: 1 << qf
+            i: 32-qf,
         }
     }
 
@@ -29,7 +27,7 @@ impl Fixed32 {
             x = 0.0;
             y = value;
         }
-        self.val = ( (x as i32) << self.f) | ((self.msig as f32 *y) as i32);
+        self.val = ( (x as i32) << self.f) | (((1<<self.f) as f32 *y) as i32);
 
     }
 
@@ -39,7 +37,7 @@ impl Fixed32 {
 
     pub fn max_int(self) -> i32 {
         let mut g = 0;
-        for i in 0..self.m-1 {
+        for i in 0..self.i-1 {
             g |= 1 << i;
         }
 
@@ -62,8 +60,7 @@ impl Add for Fixed32 {
         Fixed32 {
             val: self.val + other.geti(),
             f: self.f,
-            m: self.m,
-            msig: 1 << self.f
+            i: self.i,
         }
     }
 }
@@ -75,8 +72,7 @@ impl Sub for Fixed32 {
         Fixed32 {
             val: self.val - other.geti(),
             f: self.f,
-            m: self.m,
-            msig: 1 << self.f
+            i: self.i,
         }
     }
 }
@@ -93,8 +89,7 @@ impl Mul for Fixed32 {
         Fixed32 {
             val: nv as i32,
             f: self.f,
-            m: self.m,
-            msig: 1 << self.f
+            i: self.i,
         }
     }
 }
@@ -109,8 +104,7 @@ impl Div for Fixed32 {
         Fixed32 {
             val: nv as i32,
             f: self.f,
-            m: self.m,
-            msig: 1 << self.f
+            i: self.i,
         }
     }
 }
@@ -123,8 +117,7 @@ impl Shl<u32> for Fixed32 {
         Fixed32 {
             val: self.val << value,
             f: self.f,
-            m: self.m,
-            msig: 1 << self.f
+            i: self.i,
         }
     }
 }
@@ -137,8 +130,7 @@ impl Shr<u32> for Fixed32 {
         Fixed32 {
             val: self.val >> value,
             f: self.f,
-            m: self.m,
-            msig: 1 << self.f
+            i: self.i,
         }
     }
 }
